@@ -1,14 +1,23 @@
 package com.currencyconverter.currency_converter.service;
 
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import com.currencyconverter.currency_converter.model.Conversion;
+import com.currencyconverter.currency_converter.repository.ConversionRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service //Service class
 public class CurrencyService {
+
+    private final ConversionRepository conversionRepository;
+
+    public CurrencyService(ConversionRepository conversionRepository) {
+        this.conversionRepository = conversionRepository;
+    }
 
     public Map<String, Object> convert(
             @RequestParam String from,
@@ -39,6 +48,12 @@ public class CurrencyService {
         response.put("to", to);
         response.put("amount", amount);
         response.put("convertedAmount", convertedAmount);
+
+        // Create entity object
+        Conversion conversion = new Conversion(from, to, amount, convertedAmount);
+
+        // Save to database
+        conversionRepository.save(conversion);
 
         return response;
     }
