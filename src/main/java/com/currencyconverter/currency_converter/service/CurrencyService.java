@@ -24,6 +24,14 @@ public class CurrencyService {
             @RequestParam String to,
             @RequestParam double amount){
 
+        if (amount <= 0){
+            throw new RuntimeException("Amount must be greater than zero");
+        }
+
+        if (from == null || from.isEmpty() || to == null || to.isEmpty()){
+            throw new RuntimeException("Currency values must not be empty");
+        }
+
         RestTemplate restTemplate = new RestTemplate();
 
         // Relaced API Key from ExchangeRate-API - https://v6.exchangerate-api.com/v6/ca891384bb40e6a172a97792/latest/USD
