@@ -1,11 +1,12 @@
 package com.currencyconverter.currency_converter;
 
+import com.currencyconverter.currency_converter.model.Conversion;
 import com.currencyconverter.currency_converter.service.CurrencyService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Map;
+import java.util.List;
 
 @RestController // Mark this class as API controller
 public class HelloController {
@@ -22,7 +23,11 @@ public class HelloController {
             @RequestParam String from,
             @RequestParam String to,
             @RequestParam double amount) {
-
         return currencyService.convert(from, to, amount);
+    }
+
+    @GetMapping("/history")
+    public List<Conversion> getHistory() {
+        return currencyService.getAllConversion();
     }
 }

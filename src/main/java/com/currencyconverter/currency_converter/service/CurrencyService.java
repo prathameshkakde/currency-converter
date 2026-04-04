@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import com.currencyconverter.currency_converter.model.Conversion;
 import com.currencyconverter.currency_converter.repository.ConversionRepository;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 @Service //Service class
 public class CurrencyService {
@@ -56,5 +56,9 @@ public class CurrencyService {
         conversionRepository.save(conversion);
 
         return response;
+    }
+
+    public List<Conversion> getAllConversion(){
+        return conversionRepository.findAll();
     }
 }
