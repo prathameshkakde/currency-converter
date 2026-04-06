@@ -1,6 +1,5 @@
 package com.currencyconverter.currency_converter.service;
 
-import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
@@ -20,9 +19,9 @@ public class CurrencyService {
     }
 
     public Map<String, Object> convert(
-            @RequestParam String from,
-            @RequestParam String to,
-            @RequestParam double amount){
+            String from,
+            String to,
+            double amount){
 
         if (amount <= 0){
             throw new RuntimeException("Amount must be greater than zero");
@@ -46,8 +45,14 @@ public class CurrencyService {
         // Extract rates
         Map<String, Double> rates = (Map<String, Double>) responseFromApi.get("conversion_rates");
 
+        // Get value safely
+        Double rate = rates.get(to);
+
+        if(rate == null){
+            throw new RuntimeException("Invalid target currency: " + to);
+        }
         // Get conversion rate for target currency
-        double conversionRate = rates.get(to);
+        double conversionRate = rate;
 
         double convertedAmount = amount * conversionRate;
 
