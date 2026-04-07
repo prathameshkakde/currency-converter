@@ -56,11 +56,15 @@ public class CurrencyService {
 
         double convertedAmount = amount * conversionRate;
 
+        Map<String, Object> data = new HashMap<>();
+        data.put("from", from);
+        data.put("to", to);
+        data.put("amount", amount);
+        data.put("convertedAmount", convertedAmount);
+
         Map<String, Object> response = new HashMap<>();
-        response.put("from", from);
-        response.put("to", to);
-        response.put("amount", amount);
-        response.put("convertedAmount", convertedAmount);
+        response.put("success", true);
+        response.put("data", data);
 
         // Create entity object
         Conversion conversion = new Conversion(from, to, amount, convertedAmount);
