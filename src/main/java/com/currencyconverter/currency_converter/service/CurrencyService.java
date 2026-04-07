@@ -1,7 +1,6 @@
 package com.currencyconverter.currency_converter.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import com.currencyconverter.currency_converter.model.Conversion;
 import com.currencyconverter.currency_converter.repository.ConversionRepository;
@@ -75,7 +74,7 @@ public class CurrencyService {
         return response;
     }
 
-    public List<Conversion> getAllConversion(){
+    public List<Conversion> getAllConversions(){
         return conversionRepository.findAll();
     }
 }

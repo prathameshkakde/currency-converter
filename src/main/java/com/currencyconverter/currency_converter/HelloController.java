@@ -5,6 +5,8 @@ import com.currencyconverter.currency_converter.service.CurrencyService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
@@ -26,8 +28,19 @@ public class HelloController {
         return currencyService.convert(from, to, amount);
     }
 
+//        @GetMapping("/history")
+//        public List<Conversion> getHistory() {
+//            return currencyService.getAllConversion();
+//        }
     @GetMapping("/history")
-    public List<Conversion> getHistory() {
-        return currencyService.getAllConversion();
+    public Map<String, Object> getHistory(){
+
+        List<Conversion> data = currencyService.getAllConversions();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("Success", true);
+        response.put("data", data);
+
+        return response;
     }
 }
