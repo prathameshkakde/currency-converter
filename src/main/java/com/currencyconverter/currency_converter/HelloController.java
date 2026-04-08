@@ -24,7 +24,14 @@ public class HelloController {
     public Map<String, Object> convertCurrency(
             @RequestParam String from,
             @RequestParam String to,
-            @RequestParam double amount) {
+            @RequestParam double amount,
+            @RequestParam(required = false) String apiKey) {
+
+        // Simple API key check
+        if (apiKey == null || !apiKey.equals("12345")) {
+            throw new RuntimeException("Invalid or missing API Key");
+        }
+
         return currencyService.convert(from, to, amount);
     }
 
