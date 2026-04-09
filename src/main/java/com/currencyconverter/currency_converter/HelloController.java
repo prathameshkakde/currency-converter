@@ -2,6 +2,7 @@ package com.currencyconverter.currency_converter;
 
 import com.currencyconverter.currency_converter.model.Conversion;
 import com.currencyconverter.currency_converter.service.CurrencyService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,8 @@ import java.util.List;
 public class HelloController {
 
     private final CurrencyService currencyService;
+    @Value("${app.api.key}")
+    private String validApiKey;
 
     // Constructor (Sprint uses this to inject service)
     public HelloController(CurrencyService currencyService) {
@@ -28,7 +31,7 @@ public class HelloController {
             @RequestParam(required = false) String apiKey) {
 
         // Simple API key check
-        if (apiKey == null || !apiKey.equals("12345")) {
+        if (apiKey == null || !apiKey.equals(validApiKey)) {
             throw new RuntimeException("Invalid or missing API Key");
         }
 
