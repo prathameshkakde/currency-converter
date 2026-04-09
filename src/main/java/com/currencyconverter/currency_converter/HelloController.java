@@ -15,6 +15,7 @@ import java.util.List;
 public class HelloController {
 
     private final CurrencyService currencyService;
+
     @Value("${app.api.key}")
     private String validApiKey;
 

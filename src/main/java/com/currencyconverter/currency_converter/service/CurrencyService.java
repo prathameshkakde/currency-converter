@@ -2,6 +2,7 @@ package com.currencyconverter.currency_converter.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import com.currencyconverter.currency_converter.model.Conversion;
 import com.currencyconverter.currency_converter.repository.ConversionRepository;
 import java.util.HashMap;
@@ -12,6 +13,9 @@ import java.util.List;
 public class CurrencyService {
 
     private final ConversionRepository conversionRepository;
+
+    @Value("${exchange.api.key}")
+    private String exchangeApiKey;
 
     public CurrencyService(ConversionRepository conversionRepository) {
         this.conversionRepository = conversionRepository;
@@ -32,11 +36,8 @@ public class CurrencyService {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        // Relaced API Key from ExchangeRate-API - https://v6.exchangerate-api.com/v6/ca891384bb40e6a172a97792/latest/USD
-        String apiKey = "ca891384bb40e6a172a97792";
-
         // USD as base for simplicity first
-        String url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + from;
+        String url = "https://v6.exchangerate-api.com/v6/" + exchangeApiKey + "/latest/" + from;
 
         // Call external API and get response as Map
         Map responseFromApi = restTemplate.getForObject(url, Map.class);
