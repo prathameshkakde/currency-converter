@@ -126,7 +126,7 @@ application.properties
 
 ## Author
 
-@prathameshkakde
+[Prathamesh Kakde](https://github.com/prathameshkakde)
 
 ---
 
