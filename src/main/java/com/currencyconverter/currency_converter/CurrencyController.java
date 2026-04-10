@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.List;
 
 @RestController // Mark this class as API controller
-public class HelloController {
+public class CurrencyController {
 
     private final CurrencyService currencyService;
 
@@ -20,7 +20,7 @@ public class HelloController {
     private String validApiKey;
 
     // Constructor (Sprint uses this to inject service)
-    public HelloController(CurrencyService currencyService) {
+    public CurrencyController(CurrencyService currencyService) {
         this.currencyService = currencyService;
     }
 
@@ -49,8 +49,20 @@ public class HelloController {
         List<Conversion> data = currencyService.getAllConversions();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("Success", true);
+        response.put("success", true);
         response.put("data", data);
+
+        return response;
+    }
+
+    @GetMapping("/currencies")
+    public Map<String, Object> getCurrencies() {
+
+        Map<String, Double> rates = currencyService.getCurrencies();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("data", rates);
 
         return response;
     }

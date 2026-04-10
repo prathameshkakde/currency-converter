@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            margin: auto;
+            width: 90%;
+            max-width: 350px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+
+        input {
+            width: 90%;
+            padding: 8px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px;
+            width: 100%;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 95%;
+            padding: 8px;
+            margin: 5px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Currency Converter 💱</h2>
+
+    <label>From</label>
+    <select id="from"></select><br>
+
+    <label>To</label>
+    <select id="to"></select><br>
+
+    <label>Amount</label>
+    <input type="number" id="amount"><br>
+
+    <button onclick="convert()">Convert</button>
+
+    <button onclick="loadHistory()">Show History</button>
+
+    <h3 id="result"></h3>
+
+    <div id="history"></div>
+
+</div>
+
+<script>
+
+    function loadCurrencies() {
+        fetch("/currencies")
+            .then(response => response.json())
+            .then(data => {
+
+                if (!data.success) {
+                    console.error("API Error:", data.error);
+                    return;
+                }
+
+                console.log("Currencies API Response:", data);
+                const rates = data.data;
+
+                const fromDropdown = document.getElementById("from");
+                const toDropdown = document.getElementById("to");
+
+                // Clear existing options
+                fromDropdown.innerHTML = "";
+                toDropdown.innerHTML = "";
+
+                // Loop through currencies
+                for (let currency in rates) {
+
+                    let option1 = document.createElement("option");
+                    option1.value = currency;
+                    option1.text = currency;
+
+                    let option2 = document.createElement("option");
+                    option2.value = currency;
+                    option2.text = currency;
+
+                    fromDropdown.appendChild(option1);
+                    toDropdown.appendChild(option2);
+                }
+                // Set default values
+                document.getElementById("from").value = "USD";
+                document.getElementById("to").value = "INR";
+            })
+            .catch(error => console.error("Error loading currencies:", error));
+    }
+
+    function convert() {
+        const from = document.getElementById("from").value;
+        const to = document.getElementById("to").value;
+        const amount = document.getElementById("amount").value;
+
+        fetch(`/convert?from=${from}&to=${to}&amount=${amount}&apiKey=12345`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("result").innerText =
+                        "Converted Amount: " + data.data.convertedAmount;
+                } else {
+                    document.getElementById("result").innerText = data.error;
+                }
+            })
+            .catch(error => {
+                document.getElementById("result").innerText = "Error occurred";
+            });
+    }
+
+    window.onload = loadCurrencies;
+
+    function loadHistory() {
+        fetch("/history")
+            .then(response => response.json())
+            .then(data => {
+
+                if (!data.success) {
+                    document.getElementById("history").innerText = "Error loading history";
+                    return;
+                }
+
+                const historyDiv = document.getElementById("history");
+                historyDiv.innerHTML = "<h3>Conversion History</h3>";
+
+                data.data.forEach(item => {
+                    const entry = document.createElement("p");
+                    entry.innerText =
+                        `${item.fromCurrency} → ${item.toCurrency} : ${item.amount} → ${item.convertedAmount}`;
+                    historyDiv.appendChild(entry);
+                });
+            })
+            .catch(error => {
+                document.getElementById("history").innerText = "Error occurred";
+            });
+    }
+</script>
+
+</body>
+</html>

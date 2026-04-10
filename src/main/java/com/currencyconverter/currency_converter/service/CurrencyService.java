@@ -78,4 +78,15 @@ public class CurrencyService {
     public List<Conversion> getAllConversions(){
         return conversionRepository.findAll();
     }
+
+    public Map<String, Double> getCurrencies() {
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        String url = "https://v6.exchangerate-api.com/v6/" + exchangeApiKey + "/latest/USD";
+
+        Map responseFromApi = restTemplate.getForObject(url, Map.class);
+
+        return (Map<String, Double>) responseFromApi.get("conversion_rates");
+    }
 }
